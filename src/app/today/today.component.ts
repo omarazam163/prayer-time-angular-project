@@ -60,7 +60,6 @@ export class TodayComponent {
       data.data.date.hijri.day + ' ' + data.data.date.hijri.month.en;
     this.datedis = data.data.date.readable;
     if (isPlatformBrowser(this._platformId)) {
-      console.log(this.timing);
       this.getDueTime();
       this.intervalId = setInterval(() => {
         this.getDueTime();
