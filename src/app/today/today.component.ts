@@ -70,7 +70,6 @@ export class TodayComponent {
     clearInterval(this.intervalId);
   }
   getDueTime() {
-    console.log(this.timing.Fajr);
     let minTime =
       parseInt(this.timing.Fajr.split(':')[0]) * 60 +
       parseInt(this.timing.Fajr.split(':')[1]);
