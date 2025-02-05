@@ -8,8 +8,11 @@ export class GeoServiceService {
   constructor() { }
   ip:string='';
   getGeoData() {
-    this._httpClient.get('https://api.ipify.org?format=json').subscribe((data: any) => {this.ip = data.ip;});
-    console.log(this.ip);
-    return this._httpClient.get(`http://ip-api.com/json/${this.ip}`);
+    this._httpClient.get('https://api.ipify.org?format=json').subscribe((res: any) => {
+      this.ip = res.ip
+    })
+    return this._httpClient.get(
+              `https://apiip.net/api/check?ip=${this.ip}&accessKey=fdcd50df-6653-49e6-87cb-ee2660e7c95c`
+            );
   }
 }

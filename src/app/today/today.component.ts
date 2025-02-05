@@ -37,9 +37,9 @@ export class TodayComponent {
   ];
   async ngAfterContentInit() {
     let data2: any = await lastValueFrom(this._geoServiceService.getGeoData());
-    this.location.lat = data2.lat;
-    this.location.lng = data2.lon;
-    this.location.country = data2.country;
+    this.location.lat = data2.latitude;
+    this.location.lng = data2.longitude;
+    this.location.country = data2.countryName;
     this.location.city = data2.city;
     let data: any = await lastValueFrom(
       this._timingsServiceService.getTimings(
