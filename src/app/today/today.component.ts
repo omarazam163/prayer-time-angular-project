@@ -62,6 +62,7 @@ export class TodayComponent {
     if (isPlatformBrowser(this._platformId)) {
       this.getDueTime();
       this.intervalId = setInterval(() => {
+        console.log(this.due);
         this.getDueTime();
       }, 1000);
     }
@@ -70,34 +71,27 @@ export class TodayComponent {
     clearInterval(this.intervalId);
   }
   getDueTime() {
-    let minTime =
-      parseInt(this.timing.Fajr.split(':')[0]) * 60 +
-      parseInt(this.timing.Fajr.split(':')[1]);
-    let min: string = 'Fajr';
+    let now = new Date();
+    let currentMinutes = now.getHours() * 60 + now.getMinutes();
+    let nextPrayer = '';
+    let minTime = Infinity;
+
     (Object.keys(this.timing) as (keyof Timings)[]).forEach((key) => {
-      let current = this.timing[key];
-      let hours: string = current.split(':')[0];
-      let minutes: string = current.split(':')[1];
-      let total: number = parseInt(hours) * 60 + parseInt(minutes);
-      let now: number = new Date().getHours() * 60 + new Date().getMinutes();
-      if (total >= now) {
-        let diff = total - now;
-        if (diff < minTime || minTime == 0) {
-          minTime = diff;
-          min = key;
-        }
+      let [hours, minutes] = this.timing[key].split(':').map(Number);
+      let totalMinutes = hours * 60 + minutes;
+
+      if (totalMinutes < currentMinutes) {
+        totalMinutes += 24 * 60;
+      }
+
+      let diff = totalMinutes - currentMinutes;
+      if (diff < minTime) {
+        minTime = diff;
+        nextPrayer = key;
       }
     });
 
-    this.due = `${min} in ${this.formatTime(
-      Math.floor(minTime / 60),
-      minTime % 60
-    )}`;
+    this.due = `${nextPrayer} in ${Math.floor(minTime / 60)}:${minTime % 60}`;
   }
-  formatTime(hour: number, minute: number) {
-    return `${String(hour).padStart(2, '0')}:${String(minute).padStart(
-      2,
-      '0'
-    )}`;
-  }
+
 }

@@ -14,14 +14,16 @@ export class GeoServiceService {
 
   constructor() {}
   ip = '';
+  req!:Observable<any>;
   getGeoData(): Observable<any> {
     this._httpClient
       .get('https://api.ipify.org?format=json')
       .subscribe((res: any) => {
         this.ip = res.ip;
+       this.req=this._httpClient.get(
+              `https://apiip.net/api/check?ip=${this.ip}&accessKey=fdcd50df-6653-49e6-87cb-ee2660e7c95c`
+            );
       });
-    return this._httpClient.get(
-      `https://apiip.net/api/check?ip=${this.ip}&accessKey=fdcd50df-6653-49e6-87cb-ee2660e7c95c`
-    );
+      return this.req;
   }
 }
