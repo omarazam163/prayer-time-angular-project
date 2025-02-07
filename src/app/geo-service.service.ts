@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { Observable } from 'rxjs';
+import { Observable,pipe } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
 @Injectable({
@@ -16,14 +16,12 @@ export class GeoServiceService {
   ip = '';
   req!:Observable<any>;
   getGeoData(): Observable<any> {
-    this._httpClient
-      .get('https://api.ipify.org?format=json')
-      .subscribe((res: any) => {
+        return this._httpClient.get<{ ip: string }>('https://api.ipify.org?format=json').pipe(
+      switchMap((res) => {
         this.ip = res.ip;
-       this.req=this._httpClient.get(
-              `https://apiip.net/api/check?ip=${this.ip}&accessKey=fdcd50df-6653-49e6-87cb-ee2660e7c95c`
-            );
-      });
-      return this.req;
+        return this._httpClient.get(`https://apiip.net/api/check?ip=${this.ip}&accessKey=fdcd50df-6653-49e6-87cb-ee2660e7c95c`);
+      })
+    );
   }
 }
+

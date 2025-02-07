@@ -36,36 +36,38 @@ export class TodayComponent {
     'Isha',
   ];
   async ngAfterContentInit() {
-    let data2: any = await lastValueFrom(this._geoServiceService.getGeoData());
-    this.location.lat = data2.latitude;
-    this.location.lng = data2.longitude;
-    this.location.country = data2.countryName;
-    this.location.city = data2.city;
-    let data: any = await lastValueFrom(
-      this._timingsServiceService.getTimings(
-        this.location.lat,
-        this.location.lng,
-        this.date
-      )
-    );
-    this.timing = {
-      Fajr: data.data.timings.Fajr,
-      Sunrise: data.data.timings.Sunrise,
-      Dhuhr: data.data.timings.Dhuhr,
-      Asr: data.data.timings.Asr,
-      Maghrib: data.data.timings.Maghrib,
-      Isha: data.data.timings.Isha,
-    };
-    this.dataMoon =
-      data.data.date.hijri.day + ' ' + data.data.date.hijri.month.en;
-    this.datedis = data.data.date.readable;
-    if (isPlatformBrowser(this._platformId)) {
-      this.getDueTime();
-      this.intervalId = setInterval(() => {
-        console.log(this.due);
-        this.getDueTime();
-      }, 1000);
-    }
+        if (isPlatformBrowser(this._platformId)) {
+          let data2: any = await lastValueFrom(
+            this._geoServiceService.getGeoData()
+          );
+          this.location.lat = data2.latitude;
+          this.location.lng = data2.longitude;
+          this.location.country = data2.countryName;
+          this.location.city = data2.city;
+          let data: any = await lastValueFrom(
+            this._timingsServiceService.getTimings(
+              this.location.lat,
+              this.location.lng,
+              this.date
+            )
+          );
+          this.timing = {
+            Fajr: data.data.timings.Fajr,
+            Sunrise: data.data.timings.Sunrise,
+            Dhuhr: data.data.timings.Dhuhr,
+            Asr: data.data.timings.Asr,
+            Maghrib: data.data.timings.Maghrib,
+            Isha: data.data.timings.Isha,
+          };
+          this.dataMoon =
+            data.data.date.hijri.day + ' ' + data.data.date.hijri.month.en;
+          this.datedis = data.data.date.readable;
+          this.getDueTime();
+          this.intervalId = setInterval(() => {
+            console.log(this.due);
+            this.getDueTime();
+          }, 1000);
+        }
   }
   ngOnDestroy() {
     clearInterval(this.intervalId);
