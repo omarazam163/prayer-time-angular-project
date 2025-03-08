@@ -19,7 +19,7 @@ export class GeoServiceService {
         return this._httpClient.get<{ ip: string }>('https://api.ipify.org?format=json').pipe(
       switchMap((res) => {
         this.ip = res.ip;
-        return this._httpClient.get(`https://apiip.net/api/check?ip=${this.ip}&accessKey=fdcd50df-6653-49e6-87cb-ee2660e7c95c`);
+        return this._httpClient.get(`https://apiip.net/api/check?ip=${this.ip}&accessKey=4287c458-be03-45c1-8336-78691c24f6de`);
       })
     );
   }
